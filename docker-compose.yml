@@ -1,12 +1,11 @@
-version: "3.8"
 services:
   server:
-    build: ./server
-    environment:
-      - SECRET_KEY=supersecret
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "5000:5000"
-  agent:
-    build: ./agent
-    depends_on:
-      - server
+    volumes:
+      - .:/app
+    environment:
+      - SECRET_KEY=supersecret

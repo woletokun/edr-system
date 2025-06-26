@@ -1,20 +1,20 @@
-# Dockerfile
-
 FROM python:3.9-slim
 
-# Set working directory
+# Set working directory inside the container
 WORKDIR /app
 
-# Copy requirements and install
+# Copy and install dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy app code
-COPY server/ ./server
-COPY agent/ ./agent
+# Copy all project files (not just subfolders)
+COPY . .
 
-# Expose the port Flask will run on
+# Set Python path so 'server' can be imported
+ENV PYTHONPATH=/app
+
+# Expose the Flask port
 EXPOSE 5000
 
-# Default command to run the Flask app
+# Run the Flask app
 CMD ["python", "server/main.py"]
