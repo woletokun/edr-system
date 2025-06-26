@@ -7,6 +7,11 @@ from server.response import handle_response
 
 app = Flask(__name__)
 
+@app.route("/", methods=["GET"])
+def index():
+    return "✅ EDR Server is running. POST events to /api/events", 200
+
+
 @app.route("/api/events", methods=["POST"])
 def receive_event():
     payload = request.json
