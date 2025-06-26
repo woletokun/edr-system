@@ -1,3 +1,16 @@
+## 📢 Project Summary for Reviewers
+
+This project was built to demonstrate practical security-focused DevOps engineering. It includes real-world components such as:
+
+- Agent-server communication
+- Threat detection with secure data exchange
+- Unit/integration testing
+- Dockerized deployment
+- Extensible architecture for future EDR improvements
+
+
+
+
 # 🛡️ Endpoint Detection and Response (EDR) System
 
 A lightweight, modular Endpoint Detection and Response (EDR) system built in Python for monitoring, detecting, and responding to malicious activities on endpoint devices.
