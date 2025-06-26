@@ -1,0 +1,169 @@
+# 🛡️ EDR System Documentation
+
+## 📖 Overview
+
+This Endpoint Detection and Response (EDR) system is a lightweight, modular Python-based security tool designed to:
+
+* Monitor endpoint activity (processes, users, hostnames)
+* Detect known malicious patterns
+* Trigger automated responses (logging, quarantine simulation)
+* Securely transmit data using HMAC signatures
+* Provide testable, Dockerized deployment suitable for DevSecOps pipelines
+
+---
+
+## 🏧 Architecture
+
+```
+[ AGENT ] → [ SERVER (Flask) ] → [ Detection Logic ] → [ Response Handler ]
+     |             ↑
+     |             └── HMAC-Signed JSON Payload (POST /api/events)
+```
+
+---
+
+## ⚙️ Installation & Setup
+
+### 🔧 Prerequisites
+
+* Python 3.8+ (for local testing)
+* Git
+* Docker & Docker Compose *(optional but recommended)*
+* `pip` (Python package installer)
+
+---
+
+### 📆 Clone the Repository
+
+```bash
+git clone https://github.com/woletokun/edr-system.git
+cd edr-system
+```
+
+---
+
+### 📁 Create and Activate Virtual Environment (Local Dev)
+
+```bash
+python -m venv venv
+# Activate:
+# Windows:
+.\venv\Scripts\activate
+# Linux/macOS:
+source venv/bin/activate
+```
+
+---
+
+### 📅 Install Python Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## 🚀 Running the System
+
+### ▶️ 1. **Run Locally (for Development)**
+
+Start the Flask server:
+
+```bash
+python server/main.py
+```
+
+Then simulate the agent:
+
+```bash
+python agent/agent.py
+```
+
+---
+
+### 🐳 2. **Run with Docker Compose**
+
+Build and launch:
+
+```bash
+docker-compose up --build
+```
+
+You should see:
+
+```
+ * Running on http://0.0.0.0:5000
+```
+
+---
+
+## 📤 Agent-to-Server Communication
+
+The agent collects the following telemetry:
+
+* Hostname
+* Logged-in user
+* Running process list (name, PID, executable path)
+
+It signs the data using HMAC and sends it to:
+
+```
+POST http://localhost:5000/api/events
+```
+
+Server verifies the signature, applies detection rules, and responds with either:
+
+* `"status": "clean"`
+* `"status": "threats_detected", "threats": [...]`
+
+---
+
+## 🧪 Testing
+
+Run unit tests with:
+
+```bash
+pytest tests/
+```
+
+Or with coverage:
+
+```bash
+pip install pytest-cov
+pytest --cov=server tests/
+```
+
+---
+
+## 🔐 Security Design
+
+* **HMAC-SHA256** signed payloads
+* Signature verification on the server to prevent spoofed input
+* Input schema validation
+* Future-ready for mTLS or token-based authentication
+
+---
+
+## ⚡ Configuration
+
+Your `utils.py` or `config.json` should include:
+
+```json
+{
+  "secret_key": "supersecretkey123",
+  "server_url": "http://localhost:5000"
+}
+```
+
+---
+
+## 💡 Future Enhancements
+
+* 🔍 YARA or ML-based detection
+* 🌐 Admin dashboard for alert review
+* 📦 Agent daemonization for real-time monitoring
+* 🔒 Quarantine automation via SSH/PowerShell
+* 📡 SIEM or webhook integration
+
+---
+
