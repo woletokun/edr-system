@@ -1,100 +1,126 @@
-## 📢 Project Summary for Reviewers
+🛡️ Endpoint Detection and Response (EDR) System
+A lightweight, modular EDR system built in Python to monitor, detect, and respond to malicious activities on endpoint devices. This project demonstrates secure agent-server communication, rule-based threat detection, and real-world DevSecOps practices — including automated testing and Dockerized deployment.
 
-This project was built to demonstrate practical security-focused DevOps engineering. It includes real-world components such as:
+📢 Project Summary for Reviewers
+This system was developed as a practical security-focused DevOps demonstration, featuring:
 
-- Agent-server communication
-- Threat detection with secure data exchange
-- Unit/integration testing
-- Dockerized deployment
-- Extensible architecture for future EDR improvements
+🔗 Agent-server event flow with HMAC-signed payloads
 
+🧠 Static rule-based detection engine (extendable to ML/YARA)
 
+✅ Unit/integration testing with CI/CD compatibility
 
+🐳 Dockerized architecture for portability and scalability
 
-# 🛡️ Endpoint Detection and Response (EDR) System
+🔧 Designed for future enhancements like process isolation, mTLS, or behavioral analysis
 
-A lightweight, modular Endpoint Detection and Response (EDR) system built in Python for monitoring, detecting, and responding to malicious activities on endpoint devices.
+📌 Features
+📥 Agent-Based Monitoring
+Simulates endpoint activity by sending process/user data to the server
 
----
+🧠 Rule-Based Threat Detection
+Detects known threats using a customizable detection engine
 
-## 📌 Features
+🔐 Secure Communication
+All events are HMAC-signed to prevent tampering or spoofing
 
-- 📥 **Agent-Based Monitoring**: Collects process activity, user info, and system events from endpoints  
-- 🧠 **Rule-Based Threat Detection**: Detects known malicious processes with customizable logic  
-- 🔐 **Secure Communication**: Uses HMAC signatures to verify and trust event data from endpoints  
-- 🚨 **Automated Response**: Logs alerts and allows for pluggable remediation (e.g., quarantine, notification)  
-- 🧪 **Unit & Integration Tests**: Coverage for detection logic, agent payloads, and response triggers  
-- 🐳 **Dockerized**: Containerized services with `docker-compose` support for development and deployment
+🚨 Automated Response Handling
+Logs threats and supports future extensions (e.g., kill process, quarantine)
 
----
+🧪 Unit & Integration Tests
+Pytest test suite covering signature verification, detection logic, and response flow
 
-## 🏗️ Architecture
+🐳 Dockerized Deployment
+One-line setup using docker-compose for seamless local or CI/CD deployment
 
-┌────────┐ REST API ┌────────────┐ Detection ┌────────────┐
-│ Agent ├──────────────────────►│ Server ├──────────────────────►│ Engine │
-└────────┘ └────────────┘ └────────────┘
-▲ │
-│ Response Triggering ▼
-└──────────────────────────────────────────────────────────────────┐
-▼
-┌────────────────────┐
-│ Response API │
-└────────────────────┘
+🏗️ System Architecture
+text
+Copy code
+┌────────────┐   REST POST   ┌──────────────┐   Detection   ┌────────────────┐
+│   Agent    ├──────────────►│    Server    ├──────────────►│ Detection Logic│
+└────────────┘               └──────────────┘                └────────────────┘
+       ▲                                                              │
+       └──────────────────── Response Engine ◄───────────────────────┘
+                                    │
+                                    ▼
+                             ┌──────────────┐
+                             │ Alert / Log  │
+                             └──────────────┘
+🚀 Getting Started
+🔧 Prerequisites
+Python 3.8+
 
----
+Git
 
-## 🚀 Getting Started
+Docker & Docker Compose (optional but recommended)
 
-### 🔧 Prerequisites
+GitHub CLI gh (optional for repo management)
 
-- Python 3.8+
-- Git
-- Docker & Docker Compose *(optional, for containerized setup)*
-- `gh` CLI *(optional, for managing GitHub repo)*
-
----
-
-### 📦 Installation (Local Dev)
-
-```bash
+🛠️ Installation (Local Development)
+bash
+Copy code
 # Clone the repo
 git clone https://github.com/tokstokun/edr-system.git
 cd edr-system
 
-# Set up a virtual environment (optional but recommended)
+# (Optional) Set up a virtual environment
 python -m venv venv
-source venv/bin/activate  # or .\venv\Scripts\activate on Windows
+# Activate:
+# Linux/macOS: source venv/bin/activate
+# Windows:     .\venv\Scripts\activate
 
-# Install dependencies
+# Install Python dependencies
 pip install -r requirements.txt
+
+# Run unit tests
 pytest tests/
 
-# Run with Docker
+# Run using Docker
 docker-compose up --build
-
+📁 Project Structure
+graphql
+Copy code
 edr-system/
-├── agent/                  # Lightweight Python agent
-├── server/                 # Flask API server with detection/response logic
-├── tests/                  # Unit and integration tests
-├── docker-compose.yml      # Docker environment
+├── agent/                  # Simulated endpoint agent
+├── server/                 # Flask-based API and detection logic
+│   ├── main.py             # API entry point
+│   ├── models.py           # Signature verification
+│   ├── detection.py        # Threat detection logic
+│   └── response.py         # Response handler
+├── tests/                  # Pytest test suite
 ├── requirements.txt
+├── Dockerfile
+├── docker-compose.yml
 └── README.md
+⚙️ Detection Logic
+The detection engine currently uses a static rule set:
 
-**Detection Logic**
-The detection engine currently uses a static rule list:
+python
+Copy code
 MALICIOUS_PROCESSES = {"malicious.exe", "crypto-miner"}
-
 This can be expanded into:
-YARA rule integration
-Machine learning models
-Behavioral profiling
 
-**Security Considerations**
-All data is HMAC-signed using a shared secret key
-Input is validated against expected schema before processing
-Supports future mTLS encryption for agent-server traffic
+🔍 YARA rule matching
 
-**Author
-Oyewole Olatokun**
+🤖 ML-based anomaly detection
 
+📊 Behavior profiling or baseline deviations
+
+🔐 Security Considerations
+✅ All event data is HMAC-signed with a shared secret
+
+✅ Payloads are validated before processing
+
+✅ Designed to support future mTLS encryption and token-based auth
+
+🧪 Testing & CI
+Tests written in pytest
+
+Coverage includes agent payloads, signature verification, detection logic, and response handling
+
+Compatible with GitHub Actions (ci.yml sets PYTHONPATH=. for module resolution)
+
+👨🏽‍💻 Author
+Oyewole Olatokun
+GitHub: woletokun
 
